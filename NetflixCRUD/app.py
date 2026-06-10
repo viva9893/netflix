@@ -161,12 +161,10 @@ def seed_database():
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     
-    # Check if catalog already has data
     cursor.execute("SELECT COUNT(*) FROM catalog")
     count = cursor.fetchone()[0]
     
     if count == 0:
-        print("Seeding database with popular anime and shows...")
         anime_data = [
             ('Naruto', 'Studio Pierrot', 'Anime', 5420),
             ('Attack on Titan', 'Wit Studio', 'Anime', 8932),
@@ -198,7 +196,6 @@ def seed_database():
             anime_data
         )
         conn.commit()
-        print(f"Database seeded with {len(anime_data)} titles")
     
     conn.close()
 
