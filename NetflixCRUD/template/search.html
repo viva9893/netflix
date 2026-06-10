@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Search Netflix Catalog</h1>
+        
+        <form method="GET" action="/search" style="margin-bottom: 30px;">
+            <input type="text" name="q" placeholder="Search by title or creator..." value="{{ query }}" style="padding: 10px; width: 300px; font-size: 16px;">
+            <button type="submit" style="padding: 10px 20px;">Search</button>
+        </form>
+
+        {% if query %}
+            {% if results %}
+            <h2>Search Results for "{{ query }}" ({{ results|length }} found)</h2>
+            <div class="media-grid">
+                {% for item in results %}
+                <div class="media-card">
+                    <h3>{{ item['title'] }}</h3>
+                    <p><strong>Type:</strong> {{ item['media_type'] }}</p>
+                    <p><strong>Studio:</strong> {{ item['creator'] }}</p>
+                    <p><strong>Total Streams:</strong> {{ item['views'] }}</p>
+
+                    <div class="button-group">
+                        <form action="/watch" method="POST" style="flex: 1;">
+                            <input type="hidden" name="media_id" value="{{ item['id'] }}">
+                            <button type="submit"> Stream Now</button>
+                        </form>
+                        <a href="/delete/{{ item['id'] }}" style="flex: 1;">
+                            <button class="delete-btn" style="width: 100%;">Remove</button>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No results found for "{{ query }}". <a href="/search">Try another search</a> or <a href="/add">add new content</a>.</p>
+            {% endif %}
+        {% else %}
+            <p>Enter a search term to find shows, movies, or anime in our catalog.</p>
+        {% endif %}
+
+        <br>
+        <a href="/">← Back to Dashboard</a>
+    </div>
+</body>
+</html>
