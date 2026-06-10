@@ -156,6 +156,53 @@ def init_db():
     conn.close()
 
 
+def seed_database():
+    """Seed the database with initial anime data if catalog is empty."""
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    
+    # Check if catalog already has data
+    cursor.execute("SELECT COUNT(*) FROM catalog")
+    count = cursor.fetchone()[0]
+    
+    if count == 0:
+        print("Seeding database with popular anime and shows...")
+        anime_data = [
+            ('Naruto', 'Studio Pierrot', 'Anime', 5420),
+            ('Attack on Titan', 'Wit Studio', 'Anime', 8932),
+            ('Death Note', 'Madhouse', 'Anime', 7654),
+            ('One Piece', 'Toei Animation', 'Anime', 9215),
+            ('My Hero Academia', 'Bones', 'Anime', 6843),
+            ('Demon Slayer', 'ufotable', 'Anime', 8765),
+            ('Jujutsu Kaisen', 'MAPPA', 'Anime', 7532),
+            ('Steins;Gate', 'White Fox', 'Anime', 5421),
+            ('Code Geass', 'Sunrise', 'Anime', 6123),
+            ('Fullmetal Alchemist: Brotherhood', 'Bones', 'Anime', 9001),
+            ('Neon Genesis Evangelion', 'GAINAX', 'Anime', 5678),
+            ('Cowboy Bebop', 'Sunrise', 'Anime', 7890),
+            ('Dragon Ball Z', 'Toei Animation', 'Anime', 8234),
+            ('Bleach', 'Studio Pierrot', 'Anime', 6543),
+            ('Tokyo Ghoul', 'Studio Pierrot', 'Anime', 7234),
+            ('The Crown', 'Netflix Studios', 'TV Show', 4532),
+            ('Breaking Bad', 'AMC', 'TV Show', 9876),
+            ('Stranger Things', 'Netflix Studios', 'TV Show', 8765),
+            ('The Office', 'NBC', 'TV Show', 7654),
+            ('Inception', 'Warner Bros', 'Movie', 6543),
+            ('Interstellar', 'Paramount', 'Movie', 8765),
+            ('The Matrix', 'Warner Bros', 'Movie', 7890),
+            ('Pulp Fiction', 'Miramax', 'Movie', 6234),
+        ]
+        
+        cursor.executemany(
+            "INSERT INTO catalog (title, creator, media_type, views) VALUES (?, ?, ?, ?)", 
+            anime_data
+        )
+        conn.commit()
+        print(f"Database seeded with {len(anime_data)} titles")
+    
+    conn.close()
+
+
 @app.route('/')
 def index():
     """READ: Displays all media items in the catalog."""
@@ -170,7 +217,7 @@ def index():
 
 @app.route('/search')
 def search():
-    """SEARCH: Search for shows by title or creator."""
+    """SEARCH: Search for shows by title or creator (case-insensitive)."""
     query = request.args.get('q', '').strip()
     results = []
     
@@ -179,7 +226,7 @@ def search():
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT * FROM catalog WHERE title LIKE ? OR creator LIKE ? ORDER BY views DESC",
+            "SELECT * FROM catalog WHERE LOWER(title) LIKE LOWER(?) OR LOWER(creator) LIKE LOWER(?) ORDER BY views DESC",
             (f"%{query}%", f"%{query}%")
         )
         results = cursor.fetchall()
@@ -246,4 +293,5 @@ def trending():
 
 if __name__ == '__main__':
     init_db()
+    seed_database()
     app.run(debug=True)

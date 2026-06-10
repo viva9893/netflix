@@ -3,44 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Netflix Dashboard</title>
-
+    <title>Netflix Catalog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #141414;
+            color: #fff;
+        }
+        
+        header {
+            background-color: #000;
+            padding: 20px 40px;
+            border-bottom: 3px solid #e50914;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        h1 {
+            font-size: 32px;
+            color: #e50914;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        
+        nav {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background-color: #e50914;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .media-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #262626 100%);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .media-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.3);
+            border-color: #e50914;
+        }
+        
+        .media-card h3 {
+            color: #e50914;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+        
+        .media-card p {
+            color: #aaa;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .media-card strong {
+            color: #fff;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        button, .delete-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button {
+            background-color: #e50914;
+            color: white;
+        }
+        
+        button:hover {
+            background-color: #f40612;
+        }
+        
+        .delete-btn {
+            background-color: #333;
+            color: #aaa;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .delete-btn:hover {
+            background-color: #e50914;
+            color: white;
+        }
+        
+        .empty-message {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 18px;
+            color: #aaa;
+        }
+        
+        .empty-message a {
+            color: #e50914;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .empty-message a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Netflix Content Catalog</h1>
-    <nav>
-        <a href="/add">+ Add New Show/Anime</a> | 
-        <a href="/trending">View Top 10</a> |
-        <a href="/search">Search</a>
-    </nav>
-    <hr>
+    <header>
+        <h1>Netflix Catalog</h1>
+        <nav>
+            <a href="/add">+ Add New Show/Anime</a>
+            <a href="/trending">Top 10 Trending</a>
+            <a href="/search">Search</a>
+        </nav>
+    </header>
 
-    <h2>Available to Stream</h2>
-    {% if media_items %}
-    <div class="media-grid">
-        {% for item in media_items %}
-        <div class="media-card">
-            <h3>{{ item['title'] }}</h3>
-            <p><strong>Type:</strong> {{ item['media_type'] }}</p>
-            <p><strong>Studio:</strong> {{ item['creator'] }}</p>
-            <p><strong>Total Streams:</strong> {{ item['views'] }}</p>
+    <div class="container">
+        {% if media_items %}
+        <div class="media-grid">
+            {% for item in media_items %}
+            <div class="media-card">
+                <h3>{{ item['title'] }}</h3>
+                <p><strong>Type:</strong> {{ item['media_type'] }}</p>
+                <p><strong>Creator:</strong> {{ item['creator'] }}</p>
+                <p><strong>Streams:</strong> {{ item['views'] }}</p>
 
-            <div class="button-group">
-                <form action="/watch" method="POST" style="flex: 1;">
-                    <input type="hidden" name="media_id" value="{{ item['id'] }}">
-                    <button type="submit"> Stream Now</button>
-                </form>
-                <a href="/delete/{{ item['id'] }}" style="flex: 1;">
-                    <button class="delete-btn" style="width: 100%;">Remove</button>
-                </a>
+                <div class="button-group">
+                    <form action="/watch" method="POST" style="flex: 1;">
+                        <input type="hidden" name="media_id" value="{{ item['id'] }}">
+                        <button type="submit">Stream Now</button>
+                    </form>
+                    <a href="/delete/{{ item['id'] }}" style="flex: 1;">
+                        <button class="delete-btn">Remove</button>
+                    </a>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        {% else %}
+        <div class="empty-message">
+            <p>No content available yet.</p>
+            <p><a href="/add">Add your first show or anime now!</a></p>
+        </div>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="empty-message">
-        <p>No content available. <a href="/add" style="color: #e50914;">Add some now!</a></p>
-    </div>
-    {% endif %}
 </body>
 </html>

@@ -4,35 +4,160 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Media</title>
-    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #141414;
+            color: #fff;
+        }
+        
+        header {
+            background-color: #000;
+            padding: 20px 40px;
+            border-bottom: 3px solid #e50914;
+        }
+        
+        h1 {
+            color: #e50914;
+            font-size: 28px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .form-container {
+            background: linear-gradient(135deg, #1a1a1a 0%, #262626 100%);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: #222;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #e50914;
+            box-shadow: 0 0 8px rgba(229, 9, 20, 0.3);
+        }
+        
+        select {
+            cursor: pointer;
+        }
+        
+        select option {
+            background-color: #222;
+            color: #fff;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 14px;
+            background-color: #e50914;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #f40612;
+            transform: scale(1.02);
+        }
+        
+        .back-button {
+            flex: 1;
+            background-color: #333;
+            color: #aaa;
+        }
+        
+        .back-button:hover {
+            background-color: #444;
+            color: #fff;
+        }
+        
+        a {
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Add New Media</h1>
+    </header>
+
     <div class="container">
-        <h1>Add New Media to Netflix</h1>
-        <form method="POST">
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="creator">Creator/Studio:</label>
-                <input type="text" id="creator" name="creator" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="media_type">Media Type:</label>
-                <select id="media_type" name="media_type" required>
-                    <option value="">-- Select Type --</option>
-                    <option value="Anime">Anime</option>
-                    <option value="TV Show">TV Show</option>
-                    <option value="Movie">Movie</option>
-                </select>
-            </div>
-            
-            <button type="submit">Add Media</button>
-            <a href="/">Back to Dashboard</a>
-        </form>
+        <div class="form-container">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="Enter show or movie title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="creator">Creator/Studio</label>
+                    <input type="text" id="creator" name="creator" placeholder="Enter studio or creator name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="media_type">Media Type</label>
+                    <select id="media_type" name="media_type" required>
+                        <option value="">-- Select Type --</option>
+                        <option value="Anime">Anime</option>
+                        <option value="TV Show">TV Show</option>
+                        <option value="Movie">Movie</option>
+                    </select>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit">Add Media</button>
+                    <a href="/">
+                        <button type="button" class="back-button">Cancel</button>
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>
