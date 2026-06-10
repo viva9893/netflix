@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Dashboard</title>
+
+</head>
+<body>
+    <h1>Netflix Content Catalog</h1>
+    <nav>
+        <a href="/add">+ Add New Show/Anime</a> | 
+        <a href="/trending">View Trending</a>
+    </nav>
+    <hr>
+
+    <h2>Available to Stream</h2>
+    {% if media_items %}
+    <div class="media-grid">
+        {% for item in media_items %}
+        <div class="media-card">
+            <h3>{{ item['title'] }}</h3>
+            <p><strong>Type:</strong> {{ item['media_type'] }}</p>
+            <p><strong>Studio:</strong> {{ item['creator'] }}</p>
+            <p><strong>Total Streams:</strong> {{ item['views'] }}</p>
+
+            <div class="button-group">
+                <form action="/watch" method="POST" style="flex: 1;">
+                    <input type="hidden" name="media_id" value="{{ item['id'] }}">
+                    <button type="submit"> Stream Now</button>
+                </form>
+                <a href="/delete/{{ item['id'] }}" style="flex: 1;">
+                    <button class="delete-btn" style="width: 100%;">Remove</button>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-message">
+        <p>No content available. <a href="/add" style="color: #e50914;">Add some now!</a></p>
+    </div>
+    {% endif %}
+</body>
+</html>

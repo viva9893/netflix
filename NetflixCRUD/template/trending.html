@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trending Leaderboard</title>
+</head>
+<body>
+    <div class="container">
+        <h1> Top Streamed Leaderboard</h1>
+        {% if stats %}
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Global Streams</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in stats %}
+                <tr>
+                    <td class="rank">{{ loop.index }}</td>
+                    <td>{{ row['title'] }}</td>
+                    <td>{{ row['media_type'] }}</td>
+                    <td><strong>{{ row['views'] }}</strong> views</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="text-align: center; padding: 40px; color: #999;">No trending data available yet.</p>
+        {% endif %}
+        <br>
+        <a href="/">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

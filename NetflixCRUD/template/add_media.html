@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Media</title>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Media to Netflix</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="creator">Creator/Studio:</label>
+                <input type="text" id="creator" name="creator" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="media_type">Media Type:</label>
+                <select id="media_type" name="media_type" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="Anime">Anime</option>
+                    <option value="TV Show">TV Show</option>
+                    <option value="Movie">Movie</option>
+                </select>
+            </div>
+            
+            <button type="submit">Add Media</button>
+            <a href="/">Back to Dashboard</a>
+        </form>
+    </div>
+</body>
+</html>
