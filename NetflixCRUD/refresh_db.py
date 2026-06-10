@@ -43,8 +43,8 @@ def setup_database():
     
     conn.commit()
     conn.close()
-    print("✓ Database 'netflix_system.db' is refreshed and ready!")
-    print(f"✓ Added {len(anime_data)} popular anime titles")
+    print(" Database 'netflix_system.db' is refreshed and ready!")
+    print(f"Added {len(anime_data)} popular anime titles")
 
 if __name__ == "__main__":
     setup_database()
