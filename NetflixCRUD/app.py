@@ -8,13 +8,10 @@ DB_FILE = 'netflix_system.db'
 
 def init_db():
     """Initialize the database with the catalog table."""
-    if os.path.exists(DB_FILE):
-        os.remove(DB_FILE)
-    
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     
-    # Create the catalog table for Netflix CRUD
+    # Create the catalog table for Netflix CRUD if it doesn't exist
     cursor.execute('''CREATE TABLE IF NOT EXISTS catalog (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -142,8 +139,6 @@ def init_db():
                         FOREIGN KEY (profile_id) REFERENCES profile (profile_id),
                         FOREIGN KEY (content_id) REFERENCES content (content_id))''')
 
-
-
     cursor.execute('''CREATE TABLE IF NOT EXISTS Authors
                         (author_id INTEGER PRIMARY KEY 
                         AUTOINCREMENT, name TEXT)''')
@@ -156,7 +151,6 @@ def init_db():
                         FOREIGN KEY (book_id) REFERENCES Books (book_id),
                         FOREIGN KEY (author_id) REFERENCES Authors
                         (author_id))''')
-
 
     conn.commit()
     conn.close()
@@ -172,6 +166,26 @@ def index():
     media_items = cursor.fetchall()
     conn.close()
     return render_template('index.html', media_items=media_items)
+
+
+@app.route('/search')
+def search():
+    """SEARCH: Search for shows by title or creator."""
+    query = request.args.get('q', '').strip()
+    results = []
+    
+    if query:
+        conn = sqlite3.connect(DB_FILE)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM catalog WHERE title LIKE ? OR creator LIKE ? ORDER BY views DESC",
+            (f"%{query}%", f"%{query}%")
+        )
+        results = cursor.fetchall()
+        conn.close()
+    
+    return render_template('search.html', results=results, query=query)
 
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -220,11 +234,11 @@ def delete_media(media_id):
 
 @app.route('/trending')
 def trending():
-    """LEADERBOARD: Displays titles sorted by most views."""
+    """TOP 10 LEADERBOARD: Displays top 10 titles sorted by most views."""
     conn = sqlite3.connect(DB_FILE)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM catalog ORDER BY views DESC")
+    cursor.execute("SELECT * FROM catalog ORDER BY views DESC LIMIT 10")
     stats = cursor.fetchall()
     conn.close()
     return render_template('trending.html', stats=stats)
