@@ -139,19 +139,6 @@ def init_db():
                         FOREIGN KEY (profile_id) REFERENCES profile (profile_id),
                         FOREIGN KEY (content_id) REFERENCES content (content_id))''')
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS Authors
-                        (author_id INTEGER PRIMARY KEY 
-                        AUTOINCREMENT, name TEXT)''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS Books
-                        (book_id INTEGER PRIMARY KEY
-                        AUTOINCREMENT, title TEXT)''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS Book_Authors
-                        (book_id INTEGER, author_id INTEGER,
-                        PRIMARY KEY (book_id, author_id),
-                        FOREIGN KEY (book_id) REFERENCES Books (book_id),
-                        FOREIGN KEY (author_id) REFERENCES Authors
-                        (author_id))''')
-
     conn.commit()
     conn.close()
 
@@ -211,25 +198,6 @@ def index():
     conn.close()
     return render_template('index.html', media_items=media_items)
 
-
-@app.route('/search')
-def search():
-    """SEARCH: Search for shows by title or creator (case-insensitive)."""
-    query = request.args.get('q', '').strip()
-    results = []
-    
-    if query:
-        conn = sqlite3.connect(DB_FILE)
-        conn.row_factory = sqlite3.Row
-        cursor = conn.cursor()
-        cursor.execute(
-            "SELECT * FROM catalog WHERE LOWER(title) LIKE LOWER(?) OR LOWER(creator) LIKE LOWER(?) ORDER BY views DESC",
-            (f"%{query}%", f"%{query}%")
-        )
-        results = cursor.fetchall()
-        conn.close()
-    
-    return render_template('search.html', results=results, query=query)
 
 
 @app.route('/add', methods=['GET', 'POST'])
